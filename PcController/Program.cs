@@ -18,6 +18,8 @@ namespace PcController
             builder.Services.AddControllers();
             builder.Services.AddSingleton<IPluginManager>(x => new PluginManager(pluginFolder));
 
+            builder.Host.UseWindowsService();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
