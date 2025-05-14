@@ -1,26 +1,34 @@
-﻿using PcController.Services;
-using PluginContracts;
+﻿using PluginContracts;
 
 namespace PcController.Data
 {
     /// <summary>
     /// Хранилище плагина
     /// </summary>
-    public class PluginInfo : IDisposable
+    public class DllInfo
     {
-        public IEnumerable<IPlugin> Plugin { get; private set; }
+        public IEnumerable<PluginData> Plugin { get; private set; }
 
-        public PluginLoadContext LoadContext { get; private set; }
-
-        public PluginInfo(IEnumerable<IPlugin> plugin, PluginLoadContext pluginLoadContext)
+        public DllInfo(IEnumerable<PluginData> plugin)
         {
             Plugin = plugin;
-            LoadContext = pluginLoadContext;
         }
+    }
 
-        public void Dispose()
+    public class PluginData
+    {
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public string PluginPath { get; private set; }
+
+        internal static PluginData FromPlugin(string pluginPath, string pluginName, string pluginDescription)
         {
-            LoadContext.Dispose();
+            return new PluginData
+            {
+                Name = pluginName,
+                PluginPath = pluginPath,
+                Description = pluginDescription
+            };
         }
     }
 }

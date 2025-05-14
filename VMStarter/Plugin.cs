@@ -1,16 +1,17 @@
 ﻿using PluginContracts;
+using System.Reflection;
 
 namespace VMStarter
 {
     public class Plugin : IPlugin
     {
-        public string Name => "Запуск рабочей ВМ";
+        public string Name => "work_vm";
 
         public string Description => "Запуск рабочей виртуальной машины";
 
         public Task<ResultInfo> Execute()
         {
-            string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "vm_starter_data.json");
+            string jsonPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, "vm_starter_data.json");
 
             string? json;
 
@@ -18,9 +19,9 @@ namespace VMStarter
             {
                 json = File.ReadAllText(jsonPath);
             }
-            catch
+            catch (Exception e)
             {
-                return Task.FromResult(new ResultInfo { Error = new ErrorInfo("Ошибка чтения конфига") });
+                return Task.FromResult(new ResultInfo { Error = new ErrorInfo($"Ошибка чтения конфига - {e.Message} -- {e.InnerException}") });
             }
 
 

@@ -17,17 +17,17 @@ namespace PcController.Controllers
             }));
         }
 
-        [HttpPost("~/excecute")]
-        public async Task<IActionResult> Excecute([FromQuery] string name)
+        [HttpGet("~/execute")]
+        public async Task<IActionResult> Execute([FromQuery] string name)
         {
             var plugin = manager.FindPlugin(name);
             if (plugin == null)
                 return NotFound();
 
-            var result = await plugin.Execute();
+            var result = await manager.Execute(plugin);
 
             if (result.IsSuccess)
-                return Ok();
+                return Ok("ok");
             else
                 return StatusCode(500, result.Error.Text);
         }

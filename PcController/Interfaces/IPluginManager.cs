@@ -1,4 +1,5 @@
-﻿using PluginContracts;
+﻿using PcController.Data;
+using PluginContracts;
 
 namespace PcController.Interfaces
 {
@@ -8,18 +9,18 @@ namespace PcController.Interfaces
         /// Получить все плагины
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IPlugin> GetAllPlugins();
+        IEnumerable<PluginData> GetAllPlugins();
         /// <summary>
         /// Найти плагин
         /// </summary>
-        /// <param name="name">Имя плагина <see cref="IPlugin.Name"/></param>
+        /// <param name="name">Имя плагина <see cref="PluginData.Name"/></param>
         /// <returns></returns>
-        IPlugin? FindPlugin(string name);
+        PluginData? FindPlugin(string name);
         /// <summary>
         /// Запустить плагин
         /// </summary>
         /// <param name="plugin"></param>
         /// <returns></returns>
-        Task Excecute(IPlugin plugin);
+        Task<ResultInfo> Execute(PluginData plugin);
     }
 }
