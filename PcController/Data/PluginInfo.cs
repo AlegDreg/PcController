@@ -8,11 +8,11 @@ namespace PcController.Data
     /// </summary>
     public class PluginInfo : IDisposable
     {
-        public IPlugin Plugin { get; private set; }
+        public IEnumerable<IPlugin> Plugin { get; private set; }
 
         public PluginLoadContext LoadContext { get; private set; }
 
-        public PluginInfo(IPlugin plugin, PluginLoadContext pluginLoadContext)
+        public PluginInfo(IEnumerable<IPlugin> plugin, PluginLoadContext pluginLoadContext)
         {
             Plugin = plugin;
             LoadContext = pluginLoadContext;

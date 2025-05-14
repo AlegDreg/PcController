@@ -24,7 +24,7 @@ namespace PcController.Services
         /// <returns></returns>
         public IPlugin? FindPlugin(string name)
         {
-            throw new NotImplementedException();
+            return GetAllPlugins().FirstOrDefault(x => string.Equals(name, x.Name));
         }
         /// <summary>
         /// <inheritdoc/>
@@ -35,7 +35,7 @@ namespace PcController.Services
             if (!_plugins.Any())
                 _plugins = LoadPlugins();
 
-            return _plugins.Select(x => x.Plugin);
+            return _plugins.SelectMany(x => x.Plugin);
         }
         /// <summary>
         /// Загрузить все плагины
@@ -48,7 +48,7 @@ namespace PcController.Services
 
             List<PluginInfo> plugins = [];
 
-            foreach (var file in Directory.GetFiles(plugin_folder, "*.dll"))
+            foreach (var file in Directory.GetFiles(plugin_folder, "*.dll", SearchOption.AllDirectories))
             {
                 var _plugin = LoadPlugin(file);
 
@@ -68,19 +68,22 @@ namespace PcController.Services
             var loadContext = new PluginLoadContext(pluginPath);
             var assembly = loadContext.LoadFromAssemblyPath(pluginPath);
 
-            IPlugin? plugin = null;
+            List<IPlugin> plugin = [];
 
             foreach (var type in assembly.GetTypes())
             {
+                var aa = type.GetInterfaces();
+                var bb = typeof(IPlugin);
                 if (typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
                 {
-                    plugin = (IPlugin?)Activator.CreateInstance(type);
-                    if (plugin != null)
-                        break;
+                    var _plugin = (IPlugin?)Activator.CreateInstance(type);
+
+                    if (_plugin != null)
+                        plugin.Add(_plugin);
                 }
             }
 
-            if (plugin != null)
+            if (plugin.Count != 0)
                 return new PluginInfo(plugin, loadContext);
             else
             {

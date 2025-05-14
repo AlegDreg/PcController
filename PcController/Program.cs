@@ -9,9 +9,14 @@ namespace PcController
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            string? pluginFolder = builder.Configuration["PluginPath"];
+
+            if (pluginFolder == null)
+                throw new ArgumentNullException(nameof(pluginFolder));
+
             // Add services to the container.
             builder.Services.AddControllers();
-            builder.Services.AddSingleton<IPluginManager, PluginManager>();
+            builder.Services.AddSingleton<IPluginManager>(x => new PluginManager(pluginFolder));
 
             var app = builder.Build();
 

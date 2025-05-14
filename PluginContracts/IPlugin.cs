@@ -16,6 +16,6 @@
         /// <summary>
         /// Выполнить плагин
         /// </summary>
-        Task Execute();
+        Task<ResultInfo> Execute();
     }
 }
